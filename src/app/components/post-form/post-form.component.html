@@ -1,0 +1,69 @@
+<div class="post-form-container">
+  <h2>Créer une nouvelle publication</h2>
+
+  <form (ngSubmit)="onSubmit()" #postForm="ngForm">
+    <div class="form-group">
+      <label for="title">Titre</label>
+      <input
+        type="text"
+        id="title"
+        name="title"
+        [(ngModel)]="newPost.title"
+        class="form-control"
+        required
+        #title="ngModel">
+      <div *ngIf="title.invalid && (title.dirty || title.touched)" class="error-message">
+        Le titre est requis
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="project">Projet</label>
+      <select
+        id="project"
+        name="project"
+        [(ngModel)]="newPost.project.id"
+        class="form-control"
+        required
+        #project="ngModel">
+        <option value="">Sélectionnez un projet</option>
+        <option *ngFor="let project of projects" [value]="project.id">
+          {{ project.name }}
+        </option>
+      </select>
+      <div *ngIf="project.invalid && (project.dirty || project.touched)" class="error-message">
+        Veuillez sélectionner un projet
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="content">Contenu</label>
+      <textarea
+        id="content"
+        name="content"
+        [(ngModel)]="newPost.content"
+        class="form-control"
+        rows="5"
+        required
+        #content="ngModel">
+      </textarea>
+      <div *ngIf="content.invalid && (content.dirty || content.touched)" class="error-message">
+        Le contenu est requis
+      </div>
+    </div>
+
+    <div *ngIf="error" class="alert alert-danger">
+      {{ error }}
+    </div>
+
+    <div class="form-actions">
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="postForm.invalid || loading">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+        Publier
+      </button>
+    </div>
+  </form>
+</div> 

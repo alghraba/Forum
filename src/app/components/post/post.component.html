@@ -1,0 +1,47 @@
+<div class="post-container" *ngIf="post">
+  <div class="post-header">
+    <h2>{{ post.title }}</h2>
+    <div class="post-meta">
+      <span *ngIf="post.author">Par {{ post.author.username }}</span>
+      <span *ngIf="post.creationDate">le {{ post.creationDate | date:'dd/MM/yyyy' }}</span>
+    </div>
+  </div>
+
+  <div class="post-content">
+    {{ post.content }}
+  </div>
+
+  <div class="comments-section">
+    <h3>Commentaires</h3>
+    
+    <div class="comment-form">
+      <textarea [(ngModel)]="newComment.content" placeholder="Ajouter un commentaire..."></textarea>
+      <button (click)="addComment()" [disabled]="!newComment.content.trim()">Publier</button>
+    </div>
+
+    <div class="error-message" *ngIf="error">
+      {{ error }}
+    </div>
+
+    <div class="loading" *ngIf="loading">
+      Chargement des commentaires...
+    </div>
+
+    <div class="comments-list" *ngIf="!loading">
+      <div class="comment" *ngFor="let comment of comments">
+        <div class="comment-header">
+          <span *ngIf="comment.author">{{ comment.author.username }}</span>
+          <span *ngIf="comment.creationDate">{{ comment.creationDate | date:'dd/MM/yyyy' }}</span>
+        </div>
+        <div class="comment-content">
+          {{ comment.content }}
+        </div>
+        <div class="comment-actions" *ngIf="comment.id !== undefined">
+          <button class="delete-btn" (click)="deleteComment(comment.id)">
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

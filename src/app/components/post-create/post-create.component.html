@@ -1,0 +1,102 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <div class="card">
+        <div class="card-body">
+          <h2 class="text-center mb-4">
+            <i class="bi bi-pencil-square"></i> Créer un nouveau post
+          </h2>
+
+          <div *ngIf="error" class="alert alert-danger" role="alert">
+            <i class="bi bi-exclamation-triangle"></i> {{ error }}
+          </div>
+
+          <div *ngIf="loading" class="text-center my-5">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Chargement...</span>
+            </div>
+            <p class="mt-3 text-muted">Chargement des projets...</p>
+          </div>
+
+          <form [formGroup]="postForm" (ngSubmit)="onSubmit()" class="mt-4" *ngIf="!loading">
+            <div class="mb-4">
+              <label for="title" class="form-label">
+                <i class="bi bi-type-h1"></i> Titre
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                id="title"
+                formControlName="title"
+                placeholder="Entrez le titre du post"
+                [ngClass]="{'is-invalid': postForm.get('title')?.invalid && postForm.get('title')?.touched}"
+              >
+              <div class="invalid-feedback" *ngIf="postForm.get('title')?.errors?.['required']">
+                Le titre est requis
+              </div>
+              <div class="invalid-feedback" *ngIf="postForm.get('title')?.errors?.['minlength']">
+                Le titre doit contenir au moins 3 caractères
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label for="content" class="form-label">
+                <i class="bi bi-text-paragraph"></i> Contenu
+              </label>
+              <textarea
+                class="form-control"
+                id="content"
+                rows="5"
+                formControlName="content"
+                placeholder="Entrez le contenu du post"
+                [ngClass]="{'is-invalid': postForm.get('content')?.invalid && postForm.get('content')?.touched}"
+              ></textarea>
+              <div class="invalid-feedback" *ngIf="postForm.get('content')?.errors?.['required']">
+                Le contenu est requis
+              </div>
+              <div class="invalid-feedback" *ngIf="postForm.get('content')?.errors?.['minlength']">
+                Le contenu doit contenir au moins 10 caractères
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label d-block">
+                <i class="bi bi-folder"></i> Sélectionnez un projet
+                <span class="text-danger" *ngIf="postForm.get('projectId')?.errors?.['required'] && postForm.get('projectId')?.touched">
+                  *
+                </span>
+              </label>
+              <div class="projects-grid">
+                <div *ngFor="let project of projects" 
+                     class="project-card" 
+                     [class.selected]="postForm.get('projectId')?.value === project.id"
+                     (click)="selectProject(project)">
+                  <div class="project-icon">
+                    <i class="bi bi-folder-fill"></i>
+                  </div>
+                  <h4>{{ project.name }}</h4>
+                  <p>{{ project.description }}</p>
+                  <div class="selected-indicator" *ngIf="postForm.get('projectId')?.value === project.id">
+                    <i class="bi bi-check-circle-fill"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="invalid-feedback" *ngIf="postForm.get('projectId')?.errors?.['required'] && postForm.get('projectId')?.touched">
+                Veuillez sélectionner un projet
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between mt-5">
+              <button type="button" class="btn btn-secondary" routerLink="/posts">
+                <i class="bi bi-arrow-left"></i> Retour
+              </button>
+              <button type="submit" class="btn btn-primary" [disabled]="postForm.invalid">
+                <i class="bi bi-check-circle"></i> Créer le post
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
